@@ -2,6 +2,11 @@
 
 Este documento explica el flujo completo de la arquitectura PEPA CyberResilience en relacion con el diagrama final. Sirve para defender la exposicion, explicar cada conector y demostrar que la imagen corresponde al producto implementado.
 
+
+## Diagrama visual de arquitectura
+
+![Arquitectura PEPA CyberResilience](assets/arquitectura-pepa-cyberresilience.png)
+
 ## Resumen ejecutivo del flujo
 
 La arquitectura tiene tres flujos principales:

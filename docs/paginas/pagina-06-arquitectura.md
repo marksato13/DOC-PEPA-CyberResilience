@@ -42,6 +42,13 @@ Futuro produccion:
 Suricata/Wazuh/Zeek/Syslog -> [FUT1] Kafka/Parser -> [DS2] -> [UI1]
 ```
 
+
+## Imagen de arquitectura generada
+
+Usar esta imagen como referencia visual para la diapositiva de arquitectura:
+
+![Arquitectura PEPA CyberResilience](../assets/arquitectura-pepa-cyberresilience.png)
+
 ## Imagen o icono sugerido
 
 - CSV/documentos para T1, T2, T3.

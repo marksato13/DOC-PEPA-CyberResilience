@@ -46,6 +46,11 @@ Este repositorio contiene guias en Markdown para explicar el proyecto durante un
 15. [Flujo detallado de arquitectura y scripts usados](docs/14-flujo-arquitectura-y-scripts.md)
 
 
+
+## Diagrama de arquitectura
+
+![Arquitectura PEPA CyberResilience](docs/assets/arquitectura-pepa-cyberresilience.png)
+
 ## Paginas individuales para la presentacion
 
 - [Pagina 1 - Titulo](docs/paginas/pagina-01-titulo.md)
