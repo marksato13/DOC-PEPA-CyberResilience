@@ -10,11 +10,20 @@ Dataset utilizado: tres fuentes integradas
 
 **Tabla resumen:**
 
-| ID | Fuente | Registros | Rol | Llave |
+| ID | Fuente | Registros brutos | Uso en pipeline | Llave |
 | --- | --- | ---: | --- | --- |
-| `T1` | Global Cybersecurity Threats | 3,000 | Tabla maestra | `Attack_Type`, `Year` |
-| `T2` | AI/ML Cybersecurity Events | 20,000 | Eventos tecnicos | `Attack_Type`, `Year` |
-| `T3` | Synthesized Cybersecurity Data | 100,000 | Metricas operativas / ML | `Attack_Type` |
+| `T1` | Global Cybersecurity Threats | 3,000 | Tabla maestra conservada | `Attack_Type`, `Year` |
+| `T2` | AI/ML Cybersecurity Events | 20,000 | Eventos tecnicos filtrados/agregados | `Attack_Type`, `Year` |
+| `T3` | Synthesized Cybersecurity Data | 100,000 | Metricas operativas / ML; muestra usada en pipeline | `Attack_Type` |
+
+## Aclaracion importante
+
+```text
+T1 conserva sus 3,000 incidentes como tabla maestra.
+T2 tiene 20,000 registros brutos, pero se filtra, muestrea y agrega por Attack_Type + Year.
+T3 tiene 100,000 registros brutos, pero en pipeline_linux.py se filtra por tipos validos y se toma una muestra controlada de 6,000 registros para el procesamiento batch.
+El Parquet final conserva los incidentes T1 enriquecidos, no 123,000 filas finales.
+```
 
 ## Atributos que poner
 
@@ -86,10 +95,10 @@ Iconos:
 
 ## Que explicar oralmente
 
-> T1 es la tabla maestra porque contiene los incidentes principales. T2 y T3 tienen mas registros, por eso se agregan antes del join. Asi evitamos duplicados y conservamos los 3,000 incidentes principales de T1.
+> T1 es la tabla maestra porque contiene los incidentes principales. T2 y T3 tienen mayor granularidad, por eso se agregan antes del join. Asi evitamos duplicados y conservamos los 3,000 incidentes principales de T1 enriquecidos con metricas tecnicas.
 
 ## Pregunta probable
 
 **Por que no unieron todo directamente?**
 
-> Porque T2 y T3 tienen mayor granularidad. Un join directo multiplicaria registros. Por eso se agregan primero por llaves y luego se aplica LEFT JOIN.
+> Porque T2 y T3 tienen mayor granularidad. Un join directo multiplicaria registros y alteraria la tabla maestra. Por eso se agregan primero por llaves y luego se aplica LEFT JOIN para conservar T1.

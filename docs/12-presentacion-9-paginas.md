@@ -264,11 +264,20 @@ Modelo base: 4 variables numericas base.
 
 ## Texto en diapositiva
 
-| ID | Fuente | Registros | Rol | Llave |
+| ID | Fuente | Registros brutos | Uso en pipeline | Llave |
 | --- | --- | ---: | --- | --- |
-| `T1` | Global Cybersecurity Threats | 3,000 | Tabla maestra | `Attack_Type`, `Year` |
-| `T2` | AI/ML Cybersecurity Events | 20,000 | Eventos tecnicos | `Attack_Type`, `Year` |
-| `T3` | Synthesized Cybersecurity Data | 100,000 | Metricas operativas / ML | `Attack_Type` |
+| `T1` | Global Cybersecurity Threats | 3,000 | Tabla maestra conservada | `Attack_Type`, `Year` |
+| `T2` | AI/ML Cybersecurity Events | 20,000 | Eventos tecnicos filtrados/agregados | `Attack_Type`, `Year` |
+| `T3` | Synthesized Cybersecurity Data | 100,000 | Metricas operativas / ML; muestra usada en pipeline | `Attack_Type` |
+
+## Aclaracion importante
+
+```text
+T1 conserva sus 3,000 incidentes como tabla maestra.
+T2 tiene 20,000 registros brutos, pero se filtra, muestrea y agrega por Attack_Type + Year.
+T3 tiene 100,000 registros brutos, pero en pipeline_linux.py se filtra por tipos validos y se toma una muestra controlada de 6,000 registros para el procesamiento batch.
+El Parquet final conserva los incidentes T1 enriquecidos, no 123,000 filas finales.
+```
 
 ## Atributos principales por tabla
 
@@ -350,7 +359,7 @@ Cada tarjeta con icono:
 
 ## Nota para exponer
 
-> T1 es la tabla maestra. T2 y T3 no se unieron directamente fila por fila porque generarian duplicados. Por eso primero se agregan y luego se hace LEFT JOIN.
+> T1 es la tabla maestra. T2 y T3 no se unieron directamente fila por fila porque tienen mayor granularidad y generarian duplicados. Por eso primero se agregan y luego se hace LEFT JOIN para conservar los 3,000 incidentes T1 enriquecidos.
 
 ## Pregunta probable
 
