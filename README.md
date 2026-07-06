@@ -41,6 +41,7 @@ Este repositorio contiene guias en Markdown para explicar el proyecto durante un
 10. [Limitaciones y mejoras futuras](docs/09-limitaciones-mejoras.md)
 11. [Preguntas probables del profesor](docs/10-preguntas-profesor.md)
 12. [Checklist final de exposicion](docs/11-checklist-exposicion.md)
+13. [Presentacion de 9 paginas](docs/12-presentacion-9-paginas.md)
 
 ## Resumen para vender la solucion
 
