@@ -83,6 +83,22 @@ Porque la clasificacion multiclase de ataques se entrena sobre T3 y requiere dat
 - Equipos de ciberseguridad.
 - Personas que necesitan un laboratorio Big Data replicable.
 
+## Observaciones criticas de defensa
+
+Para las preguntas sobre arquitectura, IDs, Kafka, streaming y cuellos de botella, usar tambien la guia completa:
+
+```text
+docs/13-defensa-preguntas-sustento.md
+```
+
+Respuestas rapidas:
+
+- Arquitectura: el dashboard `UI1` consume `DS1 Parquet` y `DS2 live_events.csv`; Kafka queda como `FUT1` para produccion.
+- IDs: usar `T1/T2/T3`, `P1-P8`, `DS1/DS2`, `UI1`, `FUT1`, `KPI-01` y `VIZ-01` a `VIZ-12`.
+- Streaming: actualmente es demo con `event_generator.py`; en produccion se reemplaza por Kafka/logs reales.
+- Cuello de botella: puede aparecer en agregacion, join triple, lectura del dashboard, feed vivo y entrenamiento ML.
+- Sustento principal: se agregan T2 y T3 antes del join para evitar duplicar los incidentes de T1.
+
 ## Como se podria llevar a produccion?
 
 Con modo 3:

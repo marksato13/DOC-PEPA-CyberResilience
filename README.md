@@ -42,6 +42,7 @@ Este repositorio contiene guias en Markdown para explicar el proyecto durante un
 11. [Preguntas probables del profesor](docs/10-preguntas-profesor.md)
 12. [Checklist final de exposicion](docs/11-checklist-exposicion.md)
 13. [Presentacion de 9 paginas](docs/12-presentacion-9-paginas.md)
+14. [Defensa tecnica - preguntas, dudas y sustento](docs/13-defensa-preguntas-sustento.md)
 
 
 ## Paginas individuales para la presentacion
