@@ -424,6 +424,332 @@ Respuesta:
 > Este dashboard corresponde al Objetivo 2 porque muestra el flujo de machine learning con T3: preparacion de variables, entrenamiento, comparacion de modelos y metricas. El feed en vivo complementa la vision mostrando como el producto puede evolucionar hacia monitoreo real con logs y Kafka.
 
 
+
+---
+
+# Capturas del Dashboard 04 y explicacion por imagen
+
+Estas capturas se pueden usar directamente en la exposicion. El orden recomendado es: primero ML, luego importancia de variables, despues feed vivo y finalmente tabla Parquet para conectar con el Objetivo 1.
+
+## Imagen 1 - Metricas F1 / Accuracy por algoritmo
+
+![Dashboard 04 - Metricas ML](assets/dashboard04-metricas-ml.jpeg)
+
+### Que se ve
+
+La grafica compara modelos de machine learning con dos metricas:
+
+```text
+F1 Score
+Accuracy
+```
+
+Modelos mostrados:
+
+```text
+RandomForest
+DecisionTree
+MLP Neural
+GBT binario
+```
+
+Tambien aparece una linea de referencia cerca de `0.20`.
+
+### Como se llego a mostrar desde la data
+
+El flujo viene de T3:
+
+```text
+T3_synthesized.csv
+ -> pipeline_linux.py / ml_v2.py
+ -> preparacion de variables
+ -> entrenamiento de modelos
+ -> calculo de F1 y Accuracy
+ -> dashboard.py
+```
+
+En ML v1, el flujo base fue:
+
+```text
+T3 sampled
+ -> StringIndexer para attack_type
+ -> VectorAssembler con 4 variables numericas
+ -> StandardScaler
+ -> RandomForestClassifier
+ -> CrossValidator
+ -> F1 / Accuracy
+```
+
+En ML v2, el flujo mejorado fue:
+
+```text
+T3 completo filtrado
+ -> variables numericas + categoricas
+ -> OneHotEncoding para categorias
+ -> RF / DecisionTree / MLP
+ -> F1 / Accuracy
+ -> GBT para outcome Success/Failure
+```
+
+### Como explicarlo en exposicion
+
+> Esta grafica corresponde al Objetivo 2. Comparamos modelos de clasificacion usando variables tecnicas de T3. RandomForest, DecisionTree y MLP intentan clasificar el tipo de ataque. GBT se usa como tarea binaria para predecir `outcome`, es decir, Success o Failure.
+
+### Como interpretar el resultado
+
+La linea `0.20` es una referencia para clasificacion multiclase:
+
+```text
+5 clases -> 1 / 5 = 0.20
+```
+
+Si RandomForest, DecisionTree o MLP estan cerca de `0.20`, significa que con esos datos sinteticos el modelo no separa claramente las clases.
+
+El GBT binario se ve mas alto porque no esta resolviendo exactamente la misma tarea multiclase. Su tarea es binaria:
+
+```text
+Success / Failure
+```
+
+### Ejemplo para explicar
+
+> Si el modelo tiene que elegir entre cinco ataques, acertar al azar estaria cerca de 20%. Por eso usamos la linea base. En cambio, GBT trabaja con dos clases, Success o Failure, por eso su comparacion debe explicarse como tarea binaria, no como el mismo problema multiclase.
+
+### Pregunta probable
+
+**Por que GBT sale mejor?**
+
+Respuesta:
+
+> Porque GBT esta en una tarea binaria de `outcome`, no en la misma clasificacion multiclase de `attack_type`. Por eso se muestra como referencia adicional, pero el Objetivo 2 principal se defiende con la clasificacion de ataques usando T3.
+
+---
+
+## Imagen 2 - Importancia relativa de features
+
+![Dashboard 04 - Importancia de features](assets/dashboard04-importancia-features.jpeg)
+
+### Que se ve
+
+La grafica muestra una lista de variables ordenadas por importancia. Las barras azules representan variables numericas y las barras moradas representan variables categoricas codificadas con OHE.
+
+En la captura aparecen variables como:
+
+```text
+Financial_Loss_M
+Incidents_Reported
+t2_avg_severity
+t3_avg_response_time
+Country OHE
+Attack_Source OHE
+Protocol_Used OHE
+Target_Industry OHE
+```
+
+### Como justificarlo correctamente
+
+Esta grafica sirve para explicar el concepto de importancia de variables. Sin embargo, para defender el Objetivo 2, se debe aclarar que los scripts ML reales usan variables tecnicas de T3.
+
+Variables correctas del flujo ML con T3:
+
+```text
+data_compromised_GB
+attack_duration_min
+attack_severity
+response_time_min
+target_system_ohe
+outcome_ohe
+security_tools_used_ohe
+user_role_ohe
+industry_ohe
+mitigation_method_ohe
+```
+
+### Como se llego a mostrar desde la data
+
+Flujo conceptual:
+
+```text
+T3 -> variables numericas y categoricas -> modelo -> importancia de features -> dashboard
+```
+
+Para categorias, se aplica OHE:
+
+```text
+industry = Finance -> industry_Finance = 1
+industry = Healthcare -> industry_Healthcare = 1
+```
+
+### Como explicarlo en exposicion
+
+> Esta grafica muestra la idea de interpretabilidad del modelo: no solo comparamos metricas, tambien queremos saber que variables influyen mas. Para el Objetivo 2, la defensa correcta es relacionarlo con T3: datos comprometidos, duracion, severidad, tiempo de respuesta y variables categoricas codificadas con OHE.
+
+### Ejemplo para explicar
+
+> Si `attack_severity` y `data_compromised_GB` aparecen con alta importancia, significa que el modelo esta usando severidad y volumen de datos comprometidos para intentar diferenciar tipos de ataque.
+
+### Pregunta probable
+
+**Por que aparecen variables que no son de T3?**
+
+Respuesta:
+
+> La captura ilustra el panel de importancia de variables del dashboard. Para la defensa tecnica del Objetivo 2, lo correcto es explicar que el entrenamiento ML real se sustenta en T3. Si se lleva a una version final de produccion, conviene alinear las etiquetas visuales del dashboard con las variables reales de T3.
+
+---
+
+## Imagen 3 - Feed de eventos en vivo
+
+![Dashboard 04 - Feed eventos](assets/dashboard04-feed-eventos.jpeg)
+
+### Que se ve
+
+Se observa una tabla con eventos recientes:
+
+```text
+timestamp
+attack_type
+severity
+country
+industry
+data_GB
+outcome
+duration_min
+```
+
+Cada fila representa un evento nuevo generado por el sistema demo.
+
+### Como se llego a mostrar desde la data
+
+Este flujo no viene de T1/T2/T3 historicos. Viene del generador live:
+
+```text
+event_generator.py
+ -> genera un evento cada pocos segundos
+ -> escribe en live_events.csv
+ -> dashboard.py lee el CSV
+ -> tabla de eventos recientes
+```
+
+### Como explicarlo en exposicion
+
+> Esta tabla representa el feed en vivo. En esta version es un live demo: el script `event_generator.py` crea eventos simulados y los va agregando a `live_events.csv`. El dashboard refresca la lectura y muestra los ultimos eventos.
+
+### Ejemplo para explicar
+
+> Por ejemplo, si aparece un evento `Phishing` con severidad 4 en `UK`, industria `Government`, `75.2 GB` y resultado `Success`, el dashboard lo muestra como un evento reciente que un analista podria revisar.
+
+### Pregunta probable
+
+**Esto es streaming real?**
+
+Respuesta:
+
+> Es streaming simulado o live demo. No usa Kafka todavia. Sirve para demostrar como se veria la capa de monitoreo. En produccion, `event_generator.py` se reemplazaria por logs reales de Suricata, Wazuh, Zeek, Syslog o firewall.
+
+---
+
+## Imagen 4 - KPIs live y tabla del Parquet
+
+![Dashboard 04 - KPIs y tabla Parquet](assets/dashboard04-kpis-tabla-parquet.jpeg)
+
+### Que se ve
+
+Arriba aparecen KPIs del feed live:
+
+```text
+Total acumulado
+Mas frecuente
+Severidad prom.
+Success rate
+```
+
+Debajo aparece la tabla:
+
+```text
+Datos del Parquet - Objetivo 1
+```
+
+Con columnas como:
+
+```text
+Country
+Year
+Attack_Type
+Target_Industry
+Financial_Loss_M
+Affected_Users
+t2_total_eventos
+t2_avg_severity
+t3_avg_data_GB
+```
+
+### Como se llego a mostrar desde la data
+
+Esta captura une dos salidas de la arquitectura:
+
+```text
+live_events.csv -> KPIs live
+cybersecurity_joined Parquet -> tabla consolidada
+```
+
+La tabla Parquet viene del Objetivo 1:
+
+```text
+T1/T2/T3 -> Spark -> agregacion -> join triple -> Parquet -> dashboard
+```
+
+Los KPIs live vienen del flujo demo:
+
+```text
+event_generator.py -> live_events.csv -> dashboard
+```
+
+### Como explicarlo en exposicion
+
+> Esta parte demuestra que el dashboard consume dos fuentes. Los KPIs superiores vienen del feed live, mientras que la tabla inferior viene del Parquet consolidado del Objetivo 1. Asi conectamos el historico procesado con la simulacion en vivo.
+
+### Ejemplo para explicar
+
+> Si el total acumulado muestra 844,664 eventos y el ataque mas frecuente es DDoS, eso viene del archivo live. En cambio, cuando vemos `Country`, `Year`, `Financial_Loss_M` y `t3_avg_data_GB`, eso viene del Parquet generado por Spark despues del join triple.
+
+### Pregunta probable
+
+**Por que en algunas filas T2 aparece como None?**
+
+Respuesta:
+
+> Porque usamos LEFT JOIN con T1 como tabla maestra. Si para cierto `Attack_Type` y `Year` no hubo coincidencia agregada en T2, el registro de T1 se conserva y las columnas de T2 aparecen vacias. Eso es esperado y evita perder incidentes principales.
+
+---
+
+# Guion actualizado usando las cuatro imagenes
+
+## Orden recomendado para exponer
+
+```text
+1. Imagen 1: metricas ML -> Objetivo 2
+2. Imagen 2: importancia de features -> interpretabilidad
+3. Imagen 3: feed live -> streaming demo
+4. Imagen 4: KPIs live + Parquet -> union entre Objetivo 1 y live
+```
+
+## Texto completo recomendado
+
+> En esta seccion mostramos el Dashboard 04, que es la parte mas avanzada de PEPA CyberResilience. Primero, en la grafica de metricas, vemos el Objetivo 2: modelos de machine learning entrenados con T3. Comparamos RandomForest, DecisionTree, MLP y GBT usando metricas como F1 y Accuracy.
+>
+> El flujo v1 usa T3 con cuatro variables numericas: datos comprometidos, duracion, severidad y tiempo de respuesta. Ese flujo pasa por StringIndexer, VectorAssembler, StandardScaler, RandomForest y CrossValidator. El flujo v2 amplia el modelo usando variables numericas y categoricas con OneHotEncoding, y compara varios algoritmos.
+>
+> Luego mostramos la importancia de features. Esta parte nos ayuda a explicar que variables influyen mas en el modelo. Para defender el Objetivo 2, debemos relacionarlo con T3: data comprometida, duracion, severidad, tiempo de respuesta, sistema objetivo, industria y metodo de mitigacion.
+>
+> Despues pasamos al feed en vivo. Esta tabla no viene del dataset historico; viene de `event_generator.py`, que escribe eventos simulados en `live_events.csv`. El dashboard lee ese archivo cada pocos segundos y muestra eventos recientes con ataque, severidad, pais, industria, datos comprometidos y resultado.
+>
+> Finalmente, la ultima captura muestra que el dashboard combina dos fuentes: los KPIs live salen de `live_events.csv`, mientras que la tabla inferior sale del Parquet consolidado del Objetivo 1. Por eso PEPA no es solo un dashboard, sino una arquitectura que conecta historico procesado, ML y monitoreo live demo.
+
+## Cierre recomendado
+
+> En resumen, el Dashboard 04 prueba el Objetivo 2 con machine learning sobre T3 y, ademas, muestra la ruta hacia monitoreo en tiempo real. Hoy es demo con CSV live; en produccion podria reemplazarse por Kafka y logs reales.
+
 ---
 
 # Guion listo para exponer el Dashboard 04
