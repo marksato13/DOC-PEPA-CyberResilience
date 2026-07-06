@@ -9,6 +9,48 @@ Mostrar la parte mas avanzada del proyecto:
 - Feed de eventos en vivo.
 - Ruta hacia monitoreo real.
 
+
+## Modelo usado
+
+Modelo principal:
+
+```text
+RandomForestClassifier - Spark MLlib
+```
+
+Tipo de problema:
+
+```text
+Clasificacion multiclase para predecir attack_type
+```
+
+Datos usados:
+
+```text
+T3_synthesized.csv
+```
+
+Variables base:
+
+```text
+data_compromised_GB
+attack_duration_min
+attack_severity
+response_time_min
+```
+
+Validacion:
+
+```text
+CrossValidator con F1 Score y Accuracy
+```
+
+Version extendida:
+
+```text
+ml_v2.py compara RandomForest, DecisionTree, MLP y GBTClassifier
+```
+
 ## Grafico: Metricas F1 / Accuracy por algoritmo
 
 Compara:

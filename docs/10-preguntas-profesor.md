@@ -42,6 +42,28 @@ T3 aporta datos comprometidos, duracion, respuesta y mitigacion.
 
 Juntas enriquecen T1.
 
+
+## Que modelo usaron para el Objetivo 2?
+
+El modelo principal es `RandomForestClassifier` de Spark MLlib. Se usa para clasificacion multiclase, intentando predecir el tipo de ataque (`attack_type`) con variables tecnicas de T3.
+
+Variables base:
+
+```text
+data_compromised_GB
+attack_duration_min
+attack_severity
+response_time_min
+```
+
+La evaluacion usa `CrossValidator`, `F1 Score` y `Accuracy`.
+
+En la version extendida `ml_v2.py` tambien se comparan `DecisionTree`, `Multilayer Perceptron` y `GBTClassifier`.
+
+Respuesta corta para exposicion:
+
+> Usamos Random Forest con Spark MLlib como modelo principal del Objetivo 2. Se entrena con variables tecnicas de T3 para clasificar el tipo de ataque.
+
 ## El objetivo 2 usa solo T3?
 
 Si. En el codigo actual, la parte ML del objetivo 2 se entrena con T3. T3 contiene las variables tecnicas mas apropiadas para clasificacion: `data_compromised_GB`, `attack_duration_min`, `attack_severity`, `response_time_min` y variables categoricas como sistema objetivo, industria y metodo de mitigacion.

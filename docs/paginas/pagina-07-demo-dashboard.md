@@ -70,7 +70,7 @@ Orden recomendado:
 
 ### Dashboard 04
 
-> Muestra ML, importancia de variables y feed en vivo.
+> Muestra ML, importancia de variables y feed en vivo. El modelo principal es RandomForestClassifier de Spark MLlib, entrenado con variables tecnicas de T3.
 
 ## Pregunta probable
 

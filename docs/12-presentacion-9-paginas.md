@@ -254,6 +254,44 @@ Objetivo 2: ML con variables tecnicas de T3.
 Modelo base: 4 variables numericas base.
 ```
 
+## Modelo usado en el Objetivo 2
+
+El modelo principal usado para el Objetivo 2 es:
+
+```text
+RandomForestClassifier de Spark MLlib
+```
+
+Se usa como clasificador multiclase para predecir `attack_type` a partir de variables tecnicas de T3:
+
+```text
+data_compromised_GB
+attack_duration_min
+attack_severity
+response_time_min
+```
+
+La evaluacion se realiza con:
+
+```text
+CrossValidator
+F1 Score
+Accuracy
+```
+
+En la version extendida `ml_v2.py` tambien se comparan:
+
+```text
+RandomForest
+DecisionTree
+Multilayer Perceptron (MLP)
+GBTClassifier
+```
+
+Frase para exposicion:
+
+> Para el Objetivo 2 usamos Spark MLlib con Random Forest como modelo principal de clasificacion multiclase. El modelo se entrena con variables tecnicas de T3 para predecir el tipo de ataque. Luego comparamos metricas como F1 Score y Accuracy, y en la version extendida evaluamos tambien Decision Tree, MLP y GBT.
+
 ---
 
 # PAGINA 5 - Dataset utilizado
