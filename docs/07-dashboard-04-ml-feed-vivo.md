@@ -422,3 +422,283 @@ Respuesta:
 ## Frase para exposicion
 
 > Este dashboard corresponde al Objetivo 2 porque muestra el flujo de machine learning con T3: preparacion de variables, entrenamiento, comparacion de modelos y metricas. El feed en vivo complementa la vision mostrando como el producto puede evolucionar hacia monitoreo real con logs y Kafka.
+
+
+---
+
+# Guion listo para exponer el Dashboard 04
+
+Usar este guion cuando se muestre el Dashboard 04 en la demo. La idea es explicar de arriba hacia abajo y separar claramente el Objetivo 2 del feed live.
+
+## 1. Apertura del dashboard
+
+Texto sugerido:
+
+> Este es el Dashboard 04: ML y Feed en Vivo. Es el dashboard mas avanzado del proyecto porque conecta dos partes: primero, el Objetivo 2, que es machine learning usando T3; y segundo, una capa live demo que simula monitoreo en vivo.
+
+Idea clave:
+
+```text
+Objetivo 2 = ML con T3
+Feed vivo = complemento de monitoreo live demo
+```
+
+No decir que el feed vivo es el Objetivo 2. El Objetivo 2 es la parte de machine learning.
+
+## 2. Proposito del dashboard
+
+Texto sugerido:
+
+> Este dashboard demuestra que PEPA CyberResilience no solo integra datos historicos. Tambien permite evaluar modelos de clasificacion y mostrar una ruta hacia monitoreo en tiempo real. La parte principal es ML, y el feed en vivo complementa la vision de produccion.
+
+Que se debe recalcar:
+
+- El dashboard muestra resultados, no entrena en vivo.
+- ML viene de T3.
+- El feed viene de `event_generator.py`.
+- Kafka/logs reales quedan como mejora futura.
+
+## 3. A quien beneficia
+
+Texto sugerido:
+
+> Este dashboard beneficia a diferentes perfiles. A un analista SOC le sirve para ver eventos recientes y severidad. A un equipo de ciencia de datos le sirve para comparar modelos. A DevSecOps le muestra como podria integrarse con logs reales. Y para la evaluacion academica, demuestra que el proyecto tiene una capa predictiva y una ruta hacia produccion.
+
+Resumen rapido:
+
+```text
+SOC -> monitoreo
+Data Science -> modelos
+DevSecOps -> integracion futura
+Docente -> evidencia del Objetivo 2
+```
+
+## 4. Como se usaria
+
+Texto sugerido:
+
+> En una organizacion real, este dashboard podria usarse para comparar modelos de clasificacion, revisar si las variables tecnicas ayudan a distinguir ataques y observar eventos recientes. En nuestro proyecto, lo usamos para demostrar el Objetivo 2 y la ruta hacia monitoreo live.
+
+Ejemplo practico:
+
+> Si el equipo detecta que Ransomware tiene mayor severidad o que el modelo falla en ciertas clases, podria ajustar datos, features o reglas de monitoreo.
+
+## 5. Parte A - Objetivo 2: Machine Learning
+
+Texto sugerido:
+
+> Ahora explicamos la parte principal: el Objetivo 2. Aqui buscamos clasificar tipos de ataque usando variables tecnicas de T3. Es un problema de clasificacion multiclase porque el modelo intenta predecir si un evento corresponde a DDoS, Malware, Phishing, Ransomware o SQL Injection.
+
+Frase corta para defender:
+
+> El Objetivo 2 usa T3 porque T3 contiene variables tecnicas mas apropiadas para ML.
+
+## 6. Datos usados para ML
+
+Texto sugerido:
+
+> Para machine learning usamos `T3_synthesized.csv`. No usamos el dataset consolidado completo para entrenar el modelo principal, porque T3 tiene variables tecnicas como datos comprometidos, duracion del ataque, severidad y tiempo de respuesta.
+
+Variables a mencionar:
+
+```text
+data_compromised_GB
+attack_duration_min
+attack_severity
+response_time_min
+```
+
+Si hay tiempo, agregar:
+
+```text
+target_system
+industry
+mitigation_method
+security_tools_used
+```
+
+Respuesta corta si preguntan por T1/T2:
+
+> T1 y T2 son esenciales para el Objetivo 1 y los dashboards historicos. Para el Objetivo 2 usamos T3 porque tiene mejores variables tecnicas para clasificacion.
+
+## 7. Scripts usados
+
+Texto sugerido:
+
+> Esta parte se construyo con dos scripts. `pipeline_linux.py` contiene una version base con RandomForest y cuatro variables numericas. Luego `ml_v2.py` mejora el enfoque comparando RandomForest, DecisionTree, MLP y GBT con variables numericas y categoricas.
+
+Relacion script-funcion:
+
+```text
+pipeline_linux.py -> ML v1 base
+ml_v2.py -> ML v2 comparativo
+```
+
+## 8. Flujo de ML
+
+Texto sugerido:
+
+> El flujo ML empieza con T3. Primero se prepara la etiqueta `attack_type`, luego se ensamblan las variables, se escalan, se entrena el modelo y se evalua con metricas como F1 y Accuracy.
+
+Flujo simple:
+
+```text
+T3 -> StringIndexer -> VectorAssembler -> StandardScaler -> Modelo -> Metricas
+```
+
+Para la version mejorada:
+
+```text
+T3 -> numericas + categoricas OHE -> RF / DT / MLP / GBT -> metricas
+```
+
+## 9. Modelos usados
+
+Texto sugerido:
+
+> El modelo principal es RandomForestClassifier de Spark MLlib. Lo usamos porque es estable para clasificacion, permite comparar desempeno y puede dar importancia de variables. Ademas, en la version mejorada comparamos DecisionTree, MLP y GBT.
+
+Respuesta corta:
+
+> Modelo principal: RandomForestClassifier de Spark MLlib.
+
+## 10. Grafico F1 / Accuracy
+
+Texto sugerido:
+
+> Este grafico compara el desempeno de los modelos. F1 y Accuracy nos dicen que tan bien clasifica cada algoritmo. Como trabajamos con cinco clases, una referencia aleatoria esta cerca de 0.20, porque 1 dividido entre 5 es 0.20.
+
+Como interpretar resultados bajos:
+
+> Si los valores estan cerca de 0.20, significa que las variables del dataset sintetico no separan muy bien las clases. Eso no invalida el proyecto, porque aqui estamos demostrando el pipeline ML completo, no vendiendo un detector final de produccion.
+
+Frase de defensa:
+
+> El valor del Objetivo 2 esta en demostrar preparacion de datos, entrenamiento, validacion y comparacion de modelos con Spark MLlib.
+
+## 11. Importancia de features
+
+Texto sugerido:
+
+> Esta seccion busca mostrar que variables influyen mas en el modelo. Para explicarlo correctamente, debemos relacionarlo con T3: datos comprometidos, duracion, severidad, tiempo de respuesta y variables categoricas como industria o metodo de mitigacion.
+
+Variables correctas a mencionar:
+
+```text
+data_compromised_GB
+attack_duration_min
+attack_severity
+response_time_min
+target_system_ohe
+industry_ohe
+mitigation_method_ohe
+security_tools_used_ohe
+```
+
+Aclaracion importante:
+
+> Si alguna etiqueta visual mezcla nombres de ejemplo, la defensa oral debe ser clara: el Objetivo 2 se sustenta en variables tecnicas de T3.
+
+## 12. Que es OHE
+
+Texto sugerido:
+
+> OHE significa One Hot Encoding. Sirve para convertir texto en columnas numericas. Por ejemplo, si la industria es Finance, Healthcare o Education, el modelo no entiende esas palabras directamente; por eso se convierten en columnas binarias.
+
+Ejemplo corto:
+
+```text
+industry = Finance -> industry_Finance = 1
+industry = Healthcare -> industry_Healthcare = 1
+```
+
+## 13. Parte B - Feed en vivo
+
+Texto sugerido:
+
+> Ahora pasamos al feed en vivo. Esta parte no viene de T1, T2 ni T3 historicos. Viene de `event_generator.py`, que genera eventos simulados y los escribe en `live_events.csv`. El dashboard lee ese archivo cada pocos segundos.
+
+Flujo:
+
+```text
+event_generator.py -> live_events.csv -> dashboard.py
+```
+
+Que muestra:
+
+- Ultimos eventos.
+- Tipo de ataque.
+- Severidad.
+- Pais.
+- Industria.
+- Datos comprometidos.
+- Resultado.
+- Success rate.
+
+## 14. Es real o simulado
+
+Texto sugerido:
+
+> Es live demo o streaming simulado. No es Kafka real todavia. Lo usamos para demostrar como se veria una capa de monitoreo en vivo sin depender de infraestructura externa.
+
+Respuesta de defensa:
+
+> En produccion, `event_generator.py` se reemplazaria por logs reales de Suricata, Wazuh, Zeek, Syslog, firewall o SIEM, y la cola podria ser Kafka.
+
+## 15. Relacion con produccion
+
+Texto sugerido:
+
+> La ruta futura seria conectar logs reales a Kafka, luego pasar por un parser para normalizar los eventos y finalmente alimentar el dashboard o generar alertas. Eso permitiria evolucionar PEPA hacia un mini-SIEM.
+
+Ruta:
+
+```text
+Logs reales -> Kafka -> Parser -> Dashboard / Alertas
+```
+
+## 16. Cierre del dashboard
+
+Texto sugerido:
+
+> En resumen, este dashboard demuestra el Objetivo 2 porque muestra el flujo de machine learning con T3: preparacion de variables, entrenamiento, comparacion de modelos y metricas. El feed en vivo complementa la vision mostrando como el producto puede evolucionar hacia monitoreo real con logs y Kafka.
+
+Cierre corto:
+
+> ML demuestra capacidad predictiva; el feed live demuestra ruta operativa hacia monitoreo.
+
+---
+
+# Preguntas rapidas para responder durante la demo
+
+## Que parte es realmente el Objetivo 2?
+
+> La parte de machine learning: T3 -> Spark MLlib -> modelos -> metricas.
+
+## El feed en vivo tambien es Objetivo 2?
+
+> No. El feed en vivo es complemento de monitoreo live demo. El Objetivo 2 es ML.
+
+## Que modelo usaron?
+
+> RandomForestClassifier de Spark MLlib como modelo principal. Tambien se compararon DecisionTree, MLP y GBT.
+
+## Que datos usaron para ML?
+
+> T3, porque contiene variables tecnicas como datos comprometidos, duracion, severidad y tiempo de respuesta.
+
+## Por que los resultados no son altos?
+
+> Porque los datos son sinteticos y no separan perfectamente las clases. El objetivo fue demostrar el pipeline ML completo.
+
+## El dashboard entrena modelos en vivo?
+
+> No. El entrenamiento se hace en `pipeline_linux.py` y `ml_v2.py`. El dashboard muestra metricas y resultados.
+
+## El feed vivo es Kafka?
+
+> No. Es `event_generator.py` escribiendo en `live_events.csv`. Kafka queda para modo produccion.
+
+## Como se llevaria a produccion?
+
+> Reemplazando el generador por logs reales, agregando Kafka, parser, reglas de alerta y almacenamiento historico.
