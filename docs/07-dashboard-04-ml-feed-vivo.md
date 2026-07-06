@@ -449,6 +449,31 @@ Estas capturas se pueden usar directamente en la exposicion. El orden recomendad
 
 ![Dashboard 04 - Metricas ML](assets/dashboard04-metricas-ml.jpeg)
 
+### Guion simple debajo de la imagen
+
+> En esta imagen comparamos cuatro algoritmos. RandomForest, DecisionTree y MLP estan cerca de `0.20` en F1 y Accuracy. Eso pasa porque el problema tiene 5 clases de ataque, entonces una referencia basica o casi aleatoria esta cerca de `1/5 = 0.20`. En palabras simples, con estos datos sinteticos los modelos multiclase todavia no distinguen muy bien entre ataques. El `GBT binario` aparece cerca de `0.50`, pero no resuelve la misma tarea: ese modelo predice `Success` o `Failure`, por eso se interpreta como una tarea binaria y no se compara directamente con los otros tres.
+
+Valores que se ven:
+
+```text
+RandomForest  -> F1 aprox. 0.1949 / Accuracy aprox. 0.1962
+DecisionTree  -> F1 aprox. 0.1949 / Accuracy aprox. 0.2014
+MLP Neural    -> F1 aprox. 0.1867 / Accuracy aprox. 0.1934
+GBT binario   -> F1 aprox. 0.4989 / Accuracy aprox. 0.4993
+Linea base    -> 0.20 por 5 clases de ataque
+```
+
+Por que se ve asi:
+
+- Los tres primeros modelos intentan clasificar `attack_type` entre varias clases.
+- La linea `0.20` aparece porque hay 5 clases y `1/5 = 0.20`.
+- El resultado bajo indica que T3 sintetico no tiene una senal fuerte para separar los tipos de ataque.
+- GBT se ve mas alto porque trabaja una pregunta mas simple: `Success` o `Failure`.
+
+Frase lista para exponer:
+
+> Este grafico no busca decir que el modelo ya esta listo para produccion. Busca demostrar el pipeline ML: preparar datos, entrenar modelos, comparar metricas y reconocer limitaciones.
+
 ### Que se ve
 
 La grafica compara modelos de machine learning con dos metricas:
@@ -555,6 +580,36 @@ Respuesta:
 
 ![Dashboard 04 - Importancia de features](assets/dashboard04-importancia-features.jpeg)
 
+### Guion simple debajo de la imagen
+
+> En esta imagen vemos que variables pesan mas para el modelo. Las barras mas largas significan mayor importancia. Por ejemplo, `Financial_Loss_M` aparece con la mayor importancia, cerca de `0.18`; luego aparecen `Incidents_Reported`, `t2_avg_severity` y `t3_avg_response_time`. Las barras azules son variables numericas y las moradas son variables categoricas transformadas con OHE.
+
+Valores que se ven:
+
+```text
+Financial_Loss_M       -> aprox. 0.18
+Incidents_Reported     -> aprox. 0.15
+t2_avg_severity        -> aprox. 0.14
+t3_avg_response_time   -> aprox. 0.12
+Country (OHE)          -> aprox. 0.09
+Attack_Source (OHE)    -> aprox. 0.08
+Protocol_Used (OHE)    -> aprox. 0.08
+Target_Industry (OHE)  -> aprox. 0.07
+Action_Taken (OHE)     -> aprox. 0.05
+Vuln_Type (OHE)        -> aprox. 0.04
+```
+
+Por que se ve asi:
+
+- Las variables numericas aparecen arriba porque resumen impacto, volumen o severidad.
+- Las variables OHE aparecen porque categorias como pais, fuente o industria fueron convertidas a columnas numericas.
+- Una barra mas larga significa que el modelo uso mas esa variable para dividir o decidir.
+- Para defender el Objetivo 2, se debe aclarar que el entrenamiento real se sustenta en T3; si el dashboard muestra etiquetas mixtas, deben explicarse como visualizacion de importancia y alinear el discurso con T3.
+
+Frase lista para exponer:
+
+> Esta grafica ayuda a interpretar el modelo: no solo vemos si acierta, tambien vemos que variables influyen mas en la prediccion.
+
 ### Que se ve
 
 La grafica muestra una lista de variables ordenadas por importancia. Las barras azules representan variables numericas y las barras moradas representan variables categoricas codificadas con OHE.
@@ -628,6 +683,33 @@ Respuesta:
 
 ![Dashboard 04 - Feed eventos](assets/dashboard04-feed-eventos.jpeg)
 
+### Guion simple debajo de la imagen
+
+> Esta imagen muestra los ultimos eventos del feed vivo. Cada fila es un evento generado por `event_generator.py`. Se ve la hora, el tipo de ataque, severidad, pais, industria, datos comprometidos, resultado y duracion. Por ejemplo, aparece un `Phishing` en `UK`, industria `Government`, severidad `4`, con `75.2 GB` comprometidos y resultado `Success`.
+
+Valores que se ven:
+
+```text
+Phishing          -> UK / Government / severidad 4 / 75.2 GB / Success / 58 min
+Malware           -> Russia / Retail / severidad 1 / 30.0 GB / Success / 19 min
+SQL Injection     -> Australia / Finance / severidad 2 / 37.4 GB / Success / 122 min
+SQL Injection     -> China / Healthcare / severidad 1 / 42.8 GB / Failure / 113 min
+DDoS              -> Russia / Retail / severidad 7 / 8.6 GB / Failure / 31 min
+Man-in-the-Middle -> France / Energy / severidad 9 / 13.7 GB / Success / 26 min
+```
+
+Por que se ve asi:
+
+- Los eventos aparecen con horas recientes porque el dashboard ordena el feed por timestamp.
+- Los tipos de ataque tienen colores para identificarlos mas rapido.
+- `severity` muestra gravedad del evento en una escala numerica.
+- `outcome` indica si el ataque simulado termino en `Success` o `Failure`.
+- Esto no viene del Parquet historico; viene de `live_events.csv`.
+
+Frase lista para exponer:
+
+> Esta tabla simula como se veria un monitoreo en vivo. No es Kafka real todavia, pero demuestra la capa live del producto.
+
 ### Que se ve
 
 Se observa una tabla con eventos recientes:
@@ -678,6 +760,46 @@ Respuesta:
 ## Imagen 4 - KPIs live y tabla del Parquet
 
 ![Dashboard 04 - KPIs y tabla Parquet](assets/dashboard04-kpis-tabla-parquet.jpeg)
+
+### Guion simple debajo de la imagen
+
+> Esta imagen mezcla dos cosas. Arriba vemos KPIs del feed vivo: `844,664` eventos acumulados, ataque mas frecuente `DDoS`, severidad promedio `5.6` y `Success rate` de `45.0%`. Abajo vemos la tabla del Parquet del Objetivo 1, es decir, la data historica consolidada que salio del pipeline Spark.
+
+Valores que se ven:
+
+```text
+Total acumulado -> 844,664 eventos live generados
+Mas frecuente   -> DDoS
+Severidad prom. -> 5.6
+Success rate    -> 45.0%
+Parquet         -> 3,000 filas filtradas / 22 columnas
+```
+
+Columnas visibles del Parquet:
+
+```text
+Country
+Year
+Attack_Type
+Target_Industry
+Financial_Loss_M
+Affected_Users
+t2_total_eventos
+t2_avg_severity
+t3_avg_data_GB
+```
+
+Por que se ve asi:
+
+- Los KPIs superiores vienen de `live_events.csv`, no del Parquet.
+- La tabla inferior viene de `cybersecurity_joined`, el Parquet generado por Spark.
+- `DDoS` aparece como mas frecuente porque el generador live lo esta produciendo con mayor frecuencia en la simulacion.
+- `Success rate 45.0%` significa que 45 de cada 100 eventos simulados terminaron como `Success`.
+- `None` en columnas de T2 significa que el LEFT JOIN no encontro coincidencia en T2 para ese `Attack_Type` y `Year`, pero conserva el incidente de T1.
+
+Frase lista para exponer:
+
+> Esta captura demuestra que el dashboard une dos salidas: el historico procesado en Parquet y el feed vivo simulado. Asi conectamos Objetivo 1, Objetivo 2 y monitoreo live.
 
 ### Que se ve
 
