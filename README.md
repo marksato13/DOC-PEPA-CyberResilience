@@ -43,6 +43,7 @@ Este repositorio contiene guias en Markdown para explicar el proyecto durante un
 12. [Checklist final de exposicion](docs/11-checklist-exposicion.md)
 13. [Presentacion de 9 paginas](docs/12-presentacion-9-paginas.md)
 14. [Defensa tecnica - preguntas, dudas y sustento](docs/13-defensa-preguntas-sustento.md)
+15. [Flujo detallado de arquitectura y scripts usados](docs/14-flujo-arquitectura-y-scripts.md)
 
 
 ## Paginas individuales para la presentacion

@@ -74,3 +74,29 @@ Spark local: limitado por RAM y CPU de una VM.
 Respuesta corta:
 
 > El cuello de botella principal puede estar en Spark local y en el feed CSV si crece mucho. Por eso proponemos Kafka y almacenamiento historico como mejora.
+
+
+## Scripts que mencionar en esta pagina
+
+| Fase visual | Script | Que hace |
+| --- | --- | --- |
+| Ingesta, limpieza, agregacion y join | `pipeline_linux.py` | Procesa T1/T2/T3 con Pandas y Spark |
+| Escritura analitica | `pipeline_linux.py` | Genera `cybersecurity_joined` en Parquet |
+| ML base | `pipeline_linux.py` | Entrena RandomForest con variables de T3 |
+| ML mejorado | `ml_v2.py` | Compara RF, DT, MLP y GBT |
+| Feed en vivo | `event_generator.py` | Escribe eventos simulados en `live_events.csv` |
+| Visualizacion | `dashboard.py` | Lee Parquet y CSV live para mostrar KPIs, graficos, ML y feed |
+
+## Conectores que deben verse claros
+
+```text
+T1/T2/T3 -> pipeline_linux.py -> cybersecurity_joined Parquet -> dashboard.py
+event_generator.py -> live_events.csv -> dashboard.py
+T3 -> ml_v2.py -> metricas ML -> dashboard.py
+```
+
+No dibujar `event_generator.py` como si entrara al pipeline batch. Es una rama live independiente.
+
+## Frase para defender la imagen
+
+> La imagen representa nuestra arquitectura implementada. El bloque central corresponde al batch con Spark; el almacenamiento contiene el Parquet historico y el CSV live; y el dashboard consume ambos. Kafka no esta implementado en esta version, queda como mejora del modo produccion.

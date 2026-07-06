@@ -130,3 +130,33 @@ En PEPA se particiona por:
 ```text
 Attack_Type / Year
 ```
+
+
+## Flujo implementado con scripts
+
+Para una explicacion completa por fase, usar tambien:
+
+```text
+docs/14-flujo-arquitectura-y-scripts.md
+```
+
+Resumen de scripts:
+
+| Script | Funcion en la arquitectura |
+| --- | --- |
+| `pipeline_linux.py` | Ingesta, Spark Session, limpieza, agregacion, join triple, Parquet, EDA y ML v1 |
+| `ml_v2.py` | Entrenamiento ML mejorado con RandomForest, DecisionTree, MLP y GBT |
+| `event_generator.py` | Generacion de eventos live simulados hacia `live_events.csv` |
+| `dashboard.py` | Lectura de Parquet y `live_events.csv`; visualizacion con Streamlit y Plotly |
+
+Conectores correctos:
+
+```text
+T1/T2/T3 -> pipeline_linux.py -> Parquet -> dashboard.py
+T3 -> pipeline_linux.py / ml_v2.py -> metricas ML -> dashboard.py
+event_generator.py -> live_events.csv -> dashboard.py
+```
+
+Aclaracion importante:
+
+> `event_generator.py` no forma parte del pipeline batch de Spark. Es una rama live demo que alimenta el dashboard mediante `live_events.csv`. En produccion, esa rama puede reemplazarse por Kafka y logs reales.
