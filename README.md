@@ -43,6 +43,19 @@ Este repositorio contiene guias en Markdown para explicar el proyecto durante un
 12. [Checklist final de exposicion](docs/11-checklist-exposicion.md)
 13. [Presentacion de 9 paginas](docs/12-presentacion-9-paginas.md)
 
+
+## Paginas individuales para la presentacion
+
+- [Pagina 1 - Titulo](docs/paginas/pagina-01-titulo.md)
+- [Pagina 2 - Contexto del problema](docs/paginas/pagina-02-contexto-problema.md)
+- [Pagina 3 - Problema, batch y streaming](docs/paginas/pagina-03-problema-batch-streaming.md)
+- [Pagina 4 - Objetivos](docs/paginas/pagina-04-objetivos.md)
+- [Pagina 5 - Dataset y tablas](docs/paginas/pagina-05-dataset-tablas.md)
+- [Pagina 6 - Arquitectura](docs/paginas/pagina-06-arquitectura.md)
+- [Pagina 7 - Demo del dashboard](docs/paginas/pagina-07-demo-dashboard.md)
+- [Pagina 8 - Conclusiones y mejoras](docs/paginas/pagina-08-conclusiones-limitaciones-mejoras.md)
+- [Pagina 9 - Gracias](docs/paginas/pagina-09-gracias.md)
+
 ## Resumen para vender la solucion
 
 PEPA CyberResilience no es solo un dashboard. Es una arquitectura replicable de Big Data para ciberseguridad:
