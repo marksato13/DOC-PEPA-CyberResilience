@@ -178,6 +178,20 @@ Multilayer Perceptron
 GBTClassifier
 ```
 
+
+## Para que sirve cada algoritmo en el widget ML
+
+| Algoritmo | Para que sirve | Como defenderlo en exposicion |
+| --- | --- | --- |
+| `RandomForest` | Clasificacion multiclase de `attack_type` usando varios arboles de decision | Es el modelo principal porque es estable, reduce sobreajuste frente a un solo arbol y permite comparar importancia de variables |
+| `DecisionTree` | Clasificacion con reglas simples tipo arbol | Sirve como modelo interpretable y baseline: permite ver si reglas simples ya separan las clases |
+| `MLP Neural` | Clasificacion con una red neuronal multicapa | Se usa para probar si una arquitectura no lineal aprende patrones que los arboles no capturan |
+| `GBT binario` | Clasificacion binaria de `outcome` Success/Failure | No resuelve exactamente el mismo problema multiclase; se incluye como tarea adicional para evaluar exito o fallo del evento |
+
+Resumen para decirlo rapido:
+
+> RandomForest es nuestro modelo principal para clasificar tipos de ataque. DecisionTree funciona como comparacion interpretable. MLP prueba una red neuronal. GBT se usa en una tarea binaria distinta: predecir si el resultado fue Success o Failure.
+
 ## Grafico: Metricas F1 / Accuracy por algoritmo
 
 Este grafico compara el desempeno de los modelos.
@@ -490,6 +504,18 @@ T3 completo filtrado
  -> F1 / Accuracy
  -> GBT para outcome Success/Failure
 ```
+
+
+### Para que sirve cada algoritmo mostrado
+
+- `RandomForest`: modelo principal para clasificar `attack_type`; combina varios arboles y suele ser mas estable que un solo arbol.
+- `DecisionTree`: modelo mas simple e interpretable; sirve para comparar contra reglas de decision basicas.
+- `MLP Neural`: red neuronal multicapa; se prueba para capturar relaciones no lineales entre variables.
+- `GBT binario`: modelo de arboles boosting para una tarea binaria: predecir `outcome` Success/Failure. No debe compararse directamente como si fuera la misma tarea multiclase.
+
+Ejemplo breve:
+
+> RandomForest, DecisionTree y MLP intentan clasificar el tipo de ataque. GBT responde otra pregunta: si el evento termina en Success o Failure.
 
 ### Como explicarlo en exposicion
 
@@ -887,6 +913,20 @@ Texto sugerido:
 Respuesta corta:
 
 > Modelo principal: RandomForestClassifier de Spark MLlib.
+
+
+Para explicar cada algoritmo:
+
+```text
+RandomForest -> modelo principal para clasificar attack_type
+DecisionTree -> baseline interpretable con reglas simples
+MLP Neural -> red neuronal para patrones no lineales
+GBT binario -> tarea adicional para outcome Success/Failure
+```
+
+Texto sugerido adicional:
+
+> No todos los algoritmos responden exactamente la misma pregunta. RandomForest, DecisionTree y MLP se enfocan en clasificar el tipo de ataque. GBT se usa como clasificador binario para analizar si el resultado del evento fue Success o Failure.
 
 ## 10. Grafico F1 / Accuracy
 
