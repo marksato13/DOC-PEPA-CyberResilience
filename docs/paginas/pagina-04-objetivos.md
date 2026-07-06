@@ -47,3 +47,14 @@ Para OBJ-02:
 ```text
 OBJ-01 integra las fuentes. OBJ-02 usa T3 para ML y el dashboard para comunicar los resultados.
 ```
+
+## Nota para evitar observacion
+
+No decir que el resultado final tiene 123,000 filas consolidadas. Lo correcto es:
+
+```text
+123,000 registros brutos procesados
+3,000 incidentes T1 conservados y enriquecidos en el Parquet final
+```
+
+El Objetivo 2 usa **variables tecnicas de T3** para ML. Si se menciona el modelo base, decir **4 variables numericas base**.

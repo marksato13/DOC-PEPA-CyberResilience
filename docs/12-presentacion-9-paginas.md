@@ -245,6 +245,15 @@ OBJ-02 ML con T3 + Dashboard + Feed vivo
 
 > El primer objetivo resuelve la parte de ingenieria de datos: integrar y preparar la informacion. El segundo objetivo usa T3 para la clasificacion ML, porque T3 tiene las variables tecnicas mas adecuadas para entrenar modelos; el dashboard comunica esos resultados junto con el analisis general.
 
+## Aclaracion importante
+
+```text
+No decir: 123,000 registros consolidados finales.
+Decir: 123,000 registros brutos procesados -> 3,000 incidentes enriquecidos.
+Objetivo 2: ML con variables tecnicas de T3.
+Modelo base: 4 variables numericas base.
+```
+
 ---
 
 # PAGINA 5 - Dataset utilizado
