@@ -42,9 +42,15 @@ T3 aporta datos comprometidos, duracion, respuesta y mitigacion.
 
 Juntas enriquecen T1.
 
+## El objetivo 2 usa solo T3?
+
+Si. En el codigo actual, la parte ML del objetivo 2 se entrena con T3. T3 contiene las variables tecnicas mas apropiadas para clasificacion: `data_compromised_GB`, `attack_duration_min`, `attack_severity`, `response_time_min` y variables categoricas como sistema objetivo, industria y metodo de mitigacion.
+
+T1 y T2 son esenciales para el objetivo 1 y para los dashboards de impacto, severidad y finanzas, pero el entrenamiento ML del objetivo 2 usa T3.
+
 ## Por que los modelos ML no son perfectos?
 
-Porque la clasificacion multiclase de ataques requiere datos reales, variables fuertes y balanceo de clases. El objetivo actual es demostrar la arquitectura ML, no vender un modelo final de produccion.
+Porque la clasificacion multiclase de ataques se entrena sobre T3 y requiere datos reales, variables fuertes y balanceo de clases. El objetivo actual es demostrar la arquitectura ML, no vender un modelo final de produccion.
 
 ## A quien va dirigido?
 

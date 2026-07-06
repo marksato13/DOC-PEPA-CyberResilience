@@ -216,9 +216,9 @@ Iconos:
 
 Construir un pipeline con Apache Spark que integre T1, T2 y T3, evitando duplicados y generando un dataset Parquet particionado por tipo de ataque y anio.
 
-### Objetivo 2 - Clasificacion y analitica
+### Objetivo 2 - Clasificacion ML con T3
 
-Implementar una capa analitica con dashboard, metricas y modelos ML para clasificar tipos de ataque y analizar impacto, severidad y comportamiento.
+Implementar modelos de clasificacion con Spark MLlib usando T3, porque esta tabla contiene variables tecnicas como datos comprometidos, duracion, severidad y tiempo de respuesta. El dashboard complementa este objetivo mostrando metricas, impacto y feed en vivo.
 
 ## Imagenes o iconos recomendados
 
@@ -238,12 +238,12 @@ Para Objetivo 2:
 
 ```text
 OBJ-01 Pipeline Spark + Parquet
-OBJ-02 Dashboard + ML + Feed vivo
+OBJ-02 ML con T3 + Dashboard + Feed vivo
 ```
 
 ## Nota para exponer
 
-> El primer objetivo resuelve la parte de ingenieria de datos: integrar y preparar la informacion. El segundo objetivo usa esos datos para generar valor: dashboards, modelos y monitoreo.
+> El primer objetivo resuelve la parte de ingenieria de datos: integrar y preparar la informacion. El segundo objetivo usa T3 para la clasificacion ML, porque T3 tiene las variables tecnicas mas adecuadas para entrenar modelos; el dashboard comunica esos resultados junto con el analisis general.
 
 ---
 

@@ -4,8 +4,8 @@
 
 Mostrar la parte mas avanzada del proyecto:
 
-- Evaluacion de modelos ML.
-- Importancia de variables.
+- Evaluacion de modelos ML entrenados con T3.
+- Importancia de variables tecnicas de T3.
 - Feed de eventos en vivo.
 - Ruta hacia monitoreo real.
 
@@ -39,7 +39,7 @@ Por que 0.20:
 
 ## Grafico: Importancia relativa de features
 
-Muestra variables relevantes para el modelo, por ejemplo:
+Muestra variables relevantes para el modelo. En el objetivo 2, estas variables salen de T3, por ejemplo:
 
 - Financial_Loss_M.
 - Incidents_Reported.
@@ -114,7 +114,7 @@ Pregunta:
 
 Respuesta:
 
-> Porque es una clasificacion multiclase y las variables pueden no separar perfectamente los ataques. El objetivo es demostrar el pipeline de ML y comparacion de modelos, no afirmar que el modelo ya esta listo para produccion.
+> Porque es una clasificacion multiclase entrenada sobre T3. Las variables tecnicas de T3 pueden no separar perfectamente los ataques. El objetivo es demostrar el pipeline de ML y comparacion de modelos, no afirmar que el modelo ya esta listo para produccion.
 
 Pregunta:
 

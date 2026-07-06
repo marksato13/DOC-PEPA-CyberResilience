@@ -18,8 +18,8 @@ Integrar T1, T2 y T3 con Apache Spark, evitando duplicados y generando Parquet p
 **Objetivo 2:**
 
 ```text
-OBJ-02 Analitica, ML y monitoreo
-Visualizar KPIs, analizar impacto, comparar modelos ML y mostrar eventos en vivo.
+OBJ-02 Clasificacion ML con T3 + analitica
+Entrenar modelos con variables tecnicas de T3 para clasificar tipos de ataque; el dashboard complementa con KPIs, impacto y feed en vivo.
 ```
 
 Usar poco texto. Que se vea como dos tarjetas grandes.
@@ -34,16 +34,16 @@ Para OBJ-01:
 
 Para OBJ-02:
 
-- Icono dashboard.
 - Icono inteligencia artificial.
-- Icono monitoreo en vivo.
+- Icono tabla T3 / datos tecnicos.
+- Icono dashboard como visualizacion complementaria.
 
 ## Que explicar oralmente
 
-> El primer objetivo es de ingenieria de datos: limpiar, transformar e integrar fuentes. El segundo objetivo es de valor analitico: mostrar resultados, analizar tendencias, evaluar modelos y demostrar monitoreo en vivo.
+> El primer objetivo es de ingenieria de datos: limpiar, transformar e integrar T1, T2 y T3. El segundo objetivo, en la parte ML, usa T3 porque contiene variables tecnicas numericas y categoricas apropiadas para entrenar modelos de clasificacion de ataques. El dashboard muestra ese resultado junto con el analisis integrado.
 
 ## Mensaje clave
 
 ```text
-OBJ-01 prepara los datos. OBJ-02 convierte los datos en informacion util.
+OBJ-01 integra las fuentes. OBJ-02 usa T3 para ML y el dashboard para comunicar los resultados.
 ```
