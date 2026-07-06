@@ -776,6 +776,162 @@ Respuesta:
 
 > En resumen, el Dashboard 04 prueba el Objetivo 2 con machine learning sobre T3 y, ademas, muestra la ruta hacia monitoreo en tiempo real. Hoy es demo con CSV live; en produccion podria reemplazarse por Kafka y logs reales.
 
+
+---
+
+# Explicacion simple de cada grafico/captura
+
+Esta seccion sirve para explicar rapidamente que muestra cada parte visual del Dashboard 04, sin entrar demasiado en codigo.
+
+| Imagen / widget | Que muestra | Para que sirve | Como decirlo simple |
+| --- | --- | --- | --- |
+| Metricas F1 / Accuracy | Comparacion de modelos ML | Saber que algoritmo clasifica mejor o peor con los datos de T3 | "Aqui comparamos los modelos y vemos que tan bien intentan clasificar ataques" |
+| Importancia de features | Variables con mayor peso en el modelo | Entender que datos influyen mas en la prediccion | "Aqui vemos que variables usa mas el modelo para tomar decisiones" |
+| Feed de eventos en vivo | Ultimos eventos generados | Simular monitoreo live de ataques recientes | "Aqui vemos eventos nuevos como si llegaran en tiempo real" |
+| KPIs live | Total, ataque mas frecuente, severidad promedio y success rate | Resumir rapidamente el estado del feed vivo | "Aqui tenemos el resumen rapido de lo que esta pasando en vivo" |
+| Tabla del Parquet | Registros consolidados del Objetivo 1 | Ver los datos historicos procesados por Spark | "Aqui vemos la data final que salio del pipeline batch" |
+
+## Grafico 1 - Metricas F1 / Accuracy
+
+### Que muestra en palabras simples
+
+Muestra una comparacion entre algoritmos de machine learning. Cada barra indica que tan bien le fue a un modelo.
+
+```text
+F1 Score -> calidad general del modelo considerando errores
+Accuracy -> porcentaje aproximado de aciertos
+```
+
+### Para que sirve
+
+Sirve para responder:
+
+- Que modelo funciono mejor?
+- El modelo supera una referencia basica?
+- Los datos tienen senal suficiente para clasificar ataques?
+
+### Como explicarlo en una frase
+
+> Este grafico compara los modelos. Si las barras son mas altas, el modelo clasifica mejor. Si estan cerca de 0.20, significa que con estos datos sinteticos todavia no hay una separacion fuerte entre ataques.
+
+### Ejemplo
+
+> RandomForest, DecisionTree y MLP estan cerca de 0.20 porque intentan clasificar entre cinco tipos de ataque. GBT aparece mas alto porque trabaja una tarea diferente: predecir Success o Failure.
+
+## Grafico 2 - Importancia de features
+
+### Que muestra en palabras simples
+
+Muestra que variables pesan mas para el modelo. Las variables de arriba son las que mas influyen.
+
+### Para que sirve
+
+Sirve para interpretar el modelo. No solo queremos saber si acierta, tambien queremos saber en que datos se apoya.
+
+### Como explicarlo en una frase
+
+> Este grafico nos dice que variables mira mas el modelo para tomar una decision.
+
+### Ejemplo
+
+> Si `attack_severity` o `data_compromised_GB` tienen alta importancia, significa que el modelo considera la severidad y los datos comprometidos como senales utiles para clasificar.
+
+### Aclaracion para defender
+
+> Para el Objetivo 2, la explicacion correcta debe relacionarse con T3: datos comprometidos, duracion, severidad, tiempo de respuesta, sistema objetivo, industria y mitigacion.
+
+## Tabla 3 - Feed de eventos en vivo
+
+### Que muestra en palabras simples
+
+Muestra los ultimos eventos generados por el sistema demo.
+
+Cada fila representa un evento con:
+
+```text
+hora
+tipo de ataque
+severidad
+pais
+industria
+datos comprometidos
+resultado
+duracion
+```
+
+### Para que sirve
+
+Sirve para demostrar una capa de monitoreo live. Permite ver eventos recientes sin esperar a procesar todo el historico.
+
+### Como explicarlo en una frase
+
+> Esta tabla simula eventos que van llegando en vivo y permite ver rapidamente que ataque ocurrio, donde, con que severidad y con que resultado.
+
+### Ejemplo
+
+> Si aparece un evento Phishing en Government con severidad 4 y resultado Success, un analista podria revisarlo como evento reciente.
+
+## KPIs live
+
+### Que muestran en palabras simples
+
+Son indicadores rapidos del feed vivo:
+
+```text
+Total acumulado -> cuantos eventos live hay
+Mas frecuente -> ataque que mas aparece
+Severidad prom. -> promedio de severidad
+Success rate -> porcentaje de eventos exitosos
+```
+
+### Para que sirven
+
+Sirven para resumir el feed vivo sin revisar fila por fila.
+
+### Como explicarlo en una frase
+
+> Estos KPIs resumen lo que esta pasando en el feed vivo: cuantos eventos hay, cual ataque domina, que tan severos son y cuantos fueron exitosos.
+
+### Ejemplo
+
+> Si DDoS aparece como mas frecuente, significa que dentro del feed demo ese ataque es el que mas se esta generando.
+
+## Tabla del Parquet
+
+### Que muestra en palabras simples
+
+Muestra una parte del dataset consolidado que salio del pipeline Spark.
+
+Columnas importantes:
+
+```text
+Country
+Year
+Attack_Type
+Target_Industry
+Financial_Loss_M
+Affected_Users
+t2_total_eventos
+t2_avg_severity
+t3_avg_data_GB
+```
+
+### Para que sirve
+
+Sirve para comprobar que el pipeline batch realmente produjo una tabla final integrada.
+
+### Como explicarlo en una frase
+
+> Esta tabla es la evidencia del Objetivo 1: Spark integro T1, T2 y T3 y genero un Parquet que el dashboard puede consultar.
+
+### Ejemplo
+
+> Una fila puede mostrar un ataque DDoS en India, en el anio 2015, con perdida financiera, usuarios afectados y datos enriquecidos de T2 y T3.
+
+## Frase final para unir todos los graficos
+
+> En conjunto, estos graficos muestran tres cosas: primero, el resultado ML del Objetivo 2; segundo, la simulacion live de eventos recientes; y tercero, la conexion con el Parquet consolidado del Objetivo 1.
+
 ---
 
 # Guion listo para exponer el Dashboard 04
