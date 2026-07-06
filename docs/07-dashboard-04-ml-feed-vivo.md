@@ -1311,6 +1311,319 @@ Cierre corto:
 
 > ML demuestra capacidad predictiva; el feed live demuestra ruta operativa hacia monitoreo.
 
+
+---
+
+# Guion especifico para explicar ML v1 y ML v2
+
+Esta seccion sirve para explicar claramente que se hizo en machine learning, que archivo ejecuta cada version, cuales son sus entradas y que salidas produce.
+
+## Resumen rapido
+
+```text
+ML v1 -> pipeline_linux.py -> modelo base RandomForest con 4 variables numericas de T3
+ML v2 -> ml_v2.py -> comparacion mejorada de modelos con variables numericas + categoricas de T3
+```
+
+Frase corta para exponer:
+
+> Hicimos dos niveles de machine learning. ML v1 es la version base integrada al pipeline principal. ML v2 es una version mejorada y comparativa, enfocada en evaluar mas modelos y mas variables.
+
+---
+
+## ML v1 - Version base
+
+### Archivo donde se hace
+
+```text
+codigo_sistema/pipeline_linux.py
+```
+
+Tambien existe copia en:
+
+```text
+entrega_tecnica/scripts/pipeline_linux.py
+```
+
+### Input de ML v1
+
+El input viene de T3 ya cargado y filtrado dentro del pipeline:
+
+```text
+~/bigdata/tablas/T3_synthesized.csv
+```
+
+Dentro del script se trabaja como:
+
+```text
+t3_sampled
+```
+
+T3 se filtra por tipos de ataque validos y se usa una muestra base.
+
+### Variables usadas en ML v1
+
+```text
+attack_type -> variable objetivo / label
+
+data_compromised_GB
+attack_duration_min
+attack_severity
+response_time_min
+```
+
+Explicacion simple:
+
+> ML v1 intenta predecir el tipo de ataque usando cuatro variables numericas de T3: datos comprometidos, duracion, severidad y tiempo de respuesta.
+
+### Flujo tecnico de ML v1
+
+```text
+T3 sampled
+ -> seleccionar attack_type + 4 variables numericas
+ -> eliminar nulos
+ -> separar train/test
+ -> StringIndexer para convertir attack_type en label numerico
+ -> VectorAssembler para unir variables en un vector
+ -> StandardScaler para escalar variables
+ -> RandomForestClassifier
+ -> CrossValidator
+ -> evaluacion F1 y Accuracy
+```
+
+### Modelo usado en ML v1
+
+```text
+RandomForestClassifier - Spark MLlib
+```
+
+### Output de ML v1
+
+ML v1 produce principalmente salidas por consola:
+
+```text
+F1 Score
+Accuracy
+mejor modelo del CrossValidator
+predicciones sobre test_df
+```
+
+Tambien deja demostrado el flujo ML dentro del pipeline principal.
+
+### Que decir en exposicion
+
+> ML v1 es nuestra prueba base. Esta integrado en `pipeline_linux.py`, que primero procesa T1, T2 y T3, genera el Parquet y luego entrena un RandomForest con variables tecnicas de T3. Su objetivo es demostrar que el pipeline puede incluir una etapa predictiva usando Spark MLlib.
+
+### Ejemplo simple
+
+> Si un registro de T3 tiene alta severidad, larga duracion y muchos GB comprometidos, el modelo intenta usar esos patrones para asociarlo con un tipo de ataque.
+
+### Limitacion de ML v1
+
+```text
+Usa solo 4 variables numericas.
+No aprovecha variables categoricas.
+Es una version base.
+```
+
+Frase de defensa:
+
+> ML v1 no busca ser el mejor modelo final. Busca demostrar el flujo minimo de machine learning dentro del pipeline Big Data.
+
+---
+
+## ML v2 - Version mejorada y comparativa
+
+### Archivo donde se hace
+
+```text
+codigo_sistema/ml_v2.py
+```
+
+Tambien existe copia en:
+
+```text
+entrega_tecnica/scripts/ml_v2.py
+```
+
+### Input de ML v2
+
+ML v2 carga directamente T3:
+
+```text
+~/bigdata/tablas/T3_synthesized.csv
+```
+
+A diferencia de ML v1, ML v2 trabaja con T3 de forma mas amplia, filtrando clases validas y usando variables numericas y categoricas.
+
+### Tarea 1 de ML v2 - Clasificacion multiclase
+
+Objetivo:
+
+```text
+Predecir attack_type
+```
+
+Tipo:
+
+```text
+Clasificacion multiclase
+```
+
+Variables numericas:
+
+```text
+data_compromised_GB
+attack_duration_min
+attack_severity
+response_time_min
+```
+
+Variables categoricas:
+
+```text
+target_system
+outcome
+security_tools_used
+user_role
+industry
+mitigation_method
+```
+
+Estas variables categoricas pasan por One Hot Encoding.
+
+### Flujo tecnico de ML v2 - Tarea multiclase
+
+```text
+T3 completo filtrado
+ -> seleccionar attack_type + variables numericas + categoricas
+ -> StringIndexer para label attack_type
+ -> StringIndexer para cada categorica
+ -> OneHotEncoder para categoricas
+ -> VectorAssembler
+ -> StandardScaler
+ -> entrenar RandomForest
+ -> entrenar DecisionTree
+ -> entrenar MLP
+ -> comparar F1 y Accuracy
+```
+
+### Modelos comparados en ML v2
+
+```text
+RandomForest
+DecisionTree
+MultilayerPerceptronClassifier
+```
+
+### Tarea 2 de ML v2 - Clasificacion binaria
+
+Ademas, ML v2 agrega una tarea binaria:
+
+```text
+Predecir outcome: Success / Failure
+```
+
+Modelo usado:
+
+```text
+GBTClassifier
+```
+
+Metricas:
+
+```text
+AUC-ROC
+Accuracy
+F1
+```
+
+Importante para defensa:
+
+> GBT no responde exactamente la misma pregunta que RandomForest, DecisionTree y MLP. Los tres primeros clasifican `attack_type`; GBT predice `outcome` Success/Failure.
+
+### Output de ML v2
+
+ML v2 produce resultados por consola:
+
+```text
+Tabla comparativa de F1 y Accuracy
+Matriz de confusion para RandomForest
+Metricas por clase
+Feature importance
+AUC-ROC, Accuracy y F1 para GBT binario
+```
+
+En el dashboard estos resultados se representan visualmente en:
+
+```text
+Grafico F1 / Accuracy
+Grafico de importancia de features
+Panel ML
+```
+
+### Que decir en exposicion
+
+> ML v2 es la version mejorada. A diferencia de ML v1, no usa solo cuatro variables numericas, sino que tambien incorpora variables categoricas con One Hot Encoding. Ademas, compara varios modelos: RandomForest, DecisionTree, MLP y GBT. Por eso ML v2 sirve para analizar que algoritmo funciona mejor y que variables aportan mas informacion.
+
+### Ejemplo simple
+
+> Si dos ataques tienen severidad parecida, el modelo puede usar variables categoricas como industria, herramienta de seguridad o metodo de mitigacion para intentar diferenciarlos.
+
+### Limitacion de ML v2
+
+```text
+Sigue usando datos sinteticos.
+Las clases pueden no estar claramente separadas.
+Los resultados cercanos a 0.20 indican baja senal predictiva.
+```
+
+Frase de defensa:
+
+> ML v2 demuestra una arquitectura ML mas completa: encoding de categorias, comparacion de algoritmos, metricas por clase e importancia de variables. Para produccion se necesitarian datos reales etiquetados.
+
+---
+
+## Comparacion clara entre ML v1 y ML v2
+
+| Punto | ML v1 | ML v2 |
+| --- | --- | --- |
+| Archivo | `pipeline_linux.py` | `ml_v2.py` |
+| Input | T3 filtrado/muestreado dentro del pipeline | T3 cargado directamente |
+| Objetivo principal | Clasificar `attack_type` | Clasificar `attack_type` y predecir `outcome` |
+| Variables | 4 numericas | Numericas + categoricas OHE |
+| Modelo principal | RandomForest | RandomForest + DecisionTree + MLP + GBT |
+| Evaluacion | F1 y Accuracy | F1, Accuracy, matriz de confusion, metricas por clase, AUC para GBT |
+| Rol | Prueba base integrada al pipeline | Comparacion mejorada para el dashboard ML |
+
+## Guion corto para explicar ambos
+
+> En ML v1 usamos `pipeline_linux.py`. Esta version toma T3, selecciona cuatro variables numericas y entrena un RandomForest para clasificar el tipo de ataque. Es la version base porque demuestra que el pipeline Spark puede llegar hasta una etapa ML.
+>
+> En ML v2 usamos `ml_v2.py`. Esta version mejora el enfoque porque usa mas variables, incluyendo categoricas convertidas con One Hot Encoding. Ademas, compara varios modelos: RandomForest, DecisionTree, MLP y GBT. Los resultados se resumen en el dashboard con metricas F1, Accuracy e importancia de variables.
+>
+> La diferencia principal es que ML v1 prueba el flujo minimo y ML v2 permite comparar modelos y explicar mejor el comportamiento del aprendizaje automatico.
+
+## Pregunta probable del profesor
+
+### Por que hicieron ML v1 y ML v2?
+
+Respuesta:
+
+> Porque ML v1 valida el flujo base dentro del pipeline principal y ML v2 mejora la evaluacion agregando mas variables, mas modelos y mas metricas. Asi demostramos evolucion tecnica, no solo un unico experimento.
+
+### Cual debo defender como Objetivo 2?
+
+Respuesta:
+
+> El Objetivo 2 se defiende con ambos, pero principalmente con ML v2 porque es mas completo. ML v1 demuestra la integracion con el pipeline y ML v2 demuestra la comparacion de modelos.
+
+### Donde estan los outputs?
+
+Respuesta:
+
+> Los outputs tecnicos salen por consola cuando se ejecutan `pipeline_linux.py` y `ml_v2.py`. En el dashboard se muestran como graficos de metricas e importancia de variables. Si se quisiera produccion, el siguiente paso seria guardar esos outputs como CSV, JSON o Parquet para que el dashboard los lea automaticamente.
+
 ---
 
 # Preguntas rapidas para responder durante la demo
