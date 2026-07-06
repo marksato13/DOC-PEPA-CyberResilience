@@ -71,3 +71,13 @@ https://github.com/marksato13/DOC-PEPA-CyberResilience
 ```text
 Las limitaciones no invalidan el proyecto; definen su ruta de evolucion.
 ```
+
+## Imagenes sugeridas para la diapositiva
+
+Usar estas imagenes segun el espacio disponible en la pagina 8:
+
+![Conclusiones](../assets/conclusiones.png)
+
+![Limitaciones](../assets/limitaciones.png)
+
+![Mejoras futuras](../assets/mejoras-futuras.png)
